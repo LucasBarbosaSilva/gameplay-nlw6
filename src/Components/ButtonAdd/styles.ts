@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../../global/styles/theme";
+import { colors, fonts } from "../../global/styles/theme";
 
 
 export const styes = StyleSheet.create({
@@ -9,6 +9,8 @@ export const styes = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 8,
     height: 48,
-    width: 48
+    width: 48,
+    fontFamily: fonts.text500,
+    fontSize: 15
   }
 })

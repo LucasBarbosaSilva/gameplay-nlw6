@@ -11,7 +11,7 @@ import { GuildIcon } from "../GuildIcon";
 import PlayerSvg from '../../assets/player.svg';
 import CalendarSvg from '../../assets/calendar.svg';
 
-export interface GuildProps {
+interface GuildProps {
   id: string,
   name: string,
   icon: null,
@@ -27,19 +27,23 @@ export interface AppointmentsProps {
 }
 
 interface Props extends RectButtonProps {
-  data: AppointmentsProps
+  data: AppointmentsProps,
+  navigaton: () => void,
 }
 
 import { styles } from "./styles";
 import { colors } from "../../global/styles/theme";
 
-export function Appointments({ data, ...rest }: Props) {
+export function Appointments({ data, navigaton, ...rest }: Props) {
   const [category] = catoegories.filter(item => item.id == data.category);
   const { owner } = data.guild;
   const { primary, on } = colors;
 
   return (
-    <RectButton {...rest}>
+    <RectButton
+      onPress={navigaton}
+      {...rest}
+    >
       <View style={styles.container}>
         <GuildIcon />
 

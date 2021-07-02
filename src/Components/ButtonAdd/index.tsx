@@ -9,6 +9,7 @@ export function ButtonAdd({ ...rest }: RectButtonProps) {
     return (
         <RectButton
             style={styes.container}
+            {...rest}
         >
             <MaterialCommunityIcons
                 name="plus"
