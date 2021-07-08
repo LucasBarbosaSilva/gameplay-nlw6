@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
   image: {
     width: 64,
     height: 68,
-    backgroundColor: colors.secondary50,
+    backgroundColor: colors.secondary40,
     borderColor: colors.secondary50,
     borderWidth: 1,
     borderRadius: 8,

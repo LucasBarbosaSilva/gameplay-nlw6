@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 234,
-    marginBottom: 30,
   },
   imageContent: {
     flex: 1,
@@ -21,11 +20,12 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     color: colors.heading,
-    fontFamily: fonts.title700
+    fontFamily: fonts.title700,
   },
   subtitle: {
     fontSize: 13,
     color: colors.heading,
+    lineHeight: 21,
     fontFamily: fonts.text400
   },
   members: {

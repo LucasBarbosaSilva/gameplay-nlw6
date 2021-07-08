@@ -16,6 +16,7 @@ import { Signin } from './src/Screens/Signin';
 import { Home } from './src/Screens/Home';
 import { Background } from './src/Components/Background';
 import { Routes } from './src/routes';
+import { AuthContext, AuthProvider } from './src/hooks/auth';
 
 export default function App() {
   const [isLoaded] = useFonts({
@@ -36,8 +37,9 @@ export default function App() {
         backgroundColor='transparent'
         translucent
       />
-      {/* <Signin /> */}
-      <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </Background>
 
   );

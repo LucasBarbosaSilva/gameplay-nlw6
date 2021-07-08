@@ -14,14 +14,14 @@ import CalendarSvg from '../../assets/calendar.svg';
 interface GuildProps {
   id: string,
   name: string,
-  icon: null,
+  icon: string,
   owner: boolean
 }
 
 export interface AppointmentsProps {
   id: string,
   guild: GuildProps,
-  category: string,
+  category?: string,
   date: string,
   description: string
 }
@@ -33,11 +33,12 @@ interface Props extends RectButtonProps {
 
 import { styles } from "./styles";
 import { colors } from "../../global/styles/theme";
+import { LinearGradient } from "expo-linear-gradient";
 
 export function Appointments({ data, navigaton, ...rest }: Props) {
   const [category] = catoegories.filter(item => item.id == data.category);
   const { owner } = data.guild;
-  const { primary, on } = colors;
+  const { primary, on, secondary50, secondary70 } = colors;
 
   return (
     <RectButton
@@ -45,15 +46,19 @@ export function Appointments({ data, navigaton, ...rest }: Props) {
       {...rest}
     >
       <View style={styles.container}>
-        <GuildIcon />
-
+        <LinearGradient
+          colors={[secondary50, secondary70]}
+          style={styles.guildIconContainer}
+        >
+          <GuildIcon guildId={data.guild.id} iconId={data.guild.icon} />
+        </LinearGradient>
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={styles.title}>
               {data.guild.name}
             </Text>
             <Text style={styles.category}>
-              {category.title}
+              {category ? category.title : "Sem categoria"}
             </Text>
           </View>
 

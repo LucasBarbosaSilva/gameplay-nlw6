@@ -2,10 +2,17 @@ import { StyleSheet } from "react-native";
 import { colors, fonts } from "../../global/styles/theme";
 
 export const styles = StyleSheet.create({
-	image: {
-		width: 64,
-		height: 64,
+	container: {
+		width: 62,
+		height: 66,
 		borderRadius: 8,
-		marginRight: 20,
+		backgroundColor: colors.discord,
+		justifyContent: 'center',
+		alignItems: 'center',
+		overflow: 'hidden'
+	},
+	image: {
+		width: 62,
+		height: 66,
 	},
 })

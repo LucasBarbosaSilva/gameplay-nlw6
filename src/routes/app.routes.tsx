@@ -12,7 +12,7 @@ import { Guilds } from '../Screens/Guilds';
 
 const { Navigator, Screen } = createStackNavigator();
 
-export function AuthRoutes() {
+export function AppRoutes() {
   return (
     <Navigator
       headerMode='none'
@@ -22,11 +22,6 @@ export function AuthRoutes() {
         }
       }}
     >
-      <Screen
-        name="Signin"
-        component={Signin}
-      />
-
       <Screen
         name="Home"
         component={Home}

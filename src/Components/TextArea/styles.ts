@@ -11,6 +11,9 @@ export const styles = StyleSheet.create({
         borderRadius: 8,
         marginRight: 4,
         fontSize: 13,
-        textAlign: 'center',
+        borderWidth: 1,
+        borderColor: colors.secondary50,
+        padding: 16,
+        textAlignVertical: 'top'
     },
 })

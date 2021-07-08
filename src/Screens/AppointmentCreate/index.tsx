@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import uuid from 'react-native-uuid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { styles } from './styles';
 import { colors } from '../../global/styles/theme';
@@ -19,6 +20,9 @@ import { ModalView } from '../../Components/ModalView';
 import { Guilds } from '../Guilds';
 import { GuildProps } from '../../Components/Guild';
 
+import { COLLECTION_APPOITMENTS } from '../../config/database';
+import { useNavigation } from '@react-navigation/native';
+import { catoegories } from '../../utils/categories';
 
 interface Props {
   title: string,
@@ -32,36 +36,84 @@ export function AppointmentCreate({ title, action, ...rest }: Props) {
   const [openModal, setOpenModal] = useState(false);
   const [guild, setGuild] = useState<GuildProps>({} as GuildProps);
 
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [hour, setHour] = useState('');
+  const [minute, setMinute] = useState('');
+  const [description, setDescription] = useState('');
+
+  const navigation = useNavigation();
+
   function handleGuilds() {
-    setOpenModal(true)
+    setOpenModal(true);
+  }
+
+  function handleCloseGuilds() {
+    setOpenModal(false)
   }
 
   function handleGuildSelected(guildSeletected: GuildProps) {
     setGuild(guildSeletected);
     setOpenModal(false);
   }
+
+  function handleCategorySelect(categoryId: string) {
+    setCategory(categoryId);
+  }
+
+  async function handleSave() {
+    const listCategories = catoegories.map((item) => {
+      return item.id;
+    })
+
+    if (category in listCategories) {
+      const newAppointment = {
+        id: uuid.v4(),
+        guild,
+        category,
+        date: `${day}/${month} às ${hour}:${minute}`,
+        description
+      }
+
+      const storage = await AsyncStorage.getItem(COLLECTION_APPOITMENTS)
+      const appoitment = storage ? JSON.parse(storage) : [];
+
+      await AsyncStorage.setItem(
+        COLLECTION_APPOITMENTS,
+        JSON.stringify([...appoitment, newAppointment])
+      )
+
+      navigation.goBack();
+    } else {
+      Alert.alert("Selecione uma categoria!")
+    }
+
+
+
+
+  }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
 
     >
+      <Header
+        title={'Agendar partida'}
+      />
       <Background>
-        <Header
-          title={'Agendar partida'}
-        />
-
         <ScrollView>
           <Text style={[
             styles.label,
             { marginLeft: 24, marginTop: 32, marginBottom: 18 }
           ]}>
             Categorias
-          </Text>
+        </Text>
 
           <CategorySelector
             showCheck
-            setCategory={setCategory}
+            setCategory={handleCategorySelect}
             categorySlected={category}
           />
 
@@ -73,7 +125,7 @@ export function AppointmentCreate({ title, action, ...rest }: Props) {
               <View style={styles.select}>
                 {
                   guild.icon
-                    ? <GuildIcon />
+                    ? <GuildIcon guildId={guild.id} iconId={guild.icon} />
                     : <View style={styles.image} />
                 }
 
@@ -95,16 +147,18 @@ export function AppointmentCreate({ title, action, ...rest }: Props) {
               <View>
                 <Text style={[styles.label, { marginBottom: 15 }]}>
                   Dia e mês
-                </Text>
+              </Text>
                 <View style={styles.column}>
                   <SmallInput
                     maxLength={2}
+                    onChangeText={setDay}
                   />
                   <Text style={styles.divider}>
                     /
-                  </Text>
+                </Text>
                   <SmallInput
                     maxLength={2}
+                    onChangeText={setMonth}
                   />
                 </View>
               </View>
@@ -112,16 +166,18 @@ export function AppointmentCreate({ title, action, ...rest }: Props) {
               <View>
                 <Text style={[styles.label, { marginBottom: 15 }]}>
                   Hora e Minuto
-                </Text>
+              </Text>
                 <View style={styles.column}>
                   <SmallInput
                     maxLength={2}
+                    onChangeText={setHour}
                   />
                   <Text style={styles.divider}>
                     :
-                  </Text>
+                </Text>
                   <SmallInput
                     maxLength={2}
+                    onChangeText={setMinute}
                   />
                 </View>
               </View>
@@ -130,11 +186,11 @@ export function AppointmentCreate({ title, action, ...rest }: Props) {
             <View style={styles.field}>
               <Text style={[styles.label, { marginBottom: 12 }]}>
                 Descrição
-              </Text>
+            </Text>
 
               <Text style={styles.caracteresLimit}>
                 Max de 100 caracteres
-              </Text>
+            </Text>
 
             </View>
 
@@ -143,22 +199,28 @@ export function AppointmentCreate({ title, action, ...rest }: Props) {
               maxLength={100}
               numberOfLines={5}
               autoCorrect={false}
+              onChangeText={setDescription}
             />
 
             <View style={styles.footer}>
               <Button
                 title={"Agendar"}
+                onPress={handleSave}
               />
             </View>
           </View>
         </ScrollView>
-        <ModalView visible={openModal}>
-          <Guilds
-            handleGuildSelected={handleGuildSelected}
-          />
-        </ModalView>
-
       </Background>
+      <ModalView
+        visible={openModal}
+        closeModal={handleCloseGuilds}
+      >
+        <Guilds
+          handleGuildSelected={handleGuildSelected}
+        />
+      </ModalView>
+
+
     </KeyboardAvoidingView>
   );
 }
